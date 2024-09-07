@@ -2,13 +2,15 @@ local cursorSizex = 0.1
 local cursorSizey = 0.1
 local cursor = nil
 local scaler = 0.01
-local hi = "no"
+scene = nil
 
 function love.load()
     love.window.setFullscreen(true, "desktop")
-    cursor = love.graphics.newImage("/pointer.png")
+    cursor = love.graphics.newImage("/arts/pointer.png")
     cursorSizex = 0.1
     cursorSizey = 0.1
+    --this is the wrong way to do what I want below :(
+    scene = require "Scene1"
 
     love.mouse.setVisible(false)
     love.mouse.setGrabbed(true)
@@ -44,8 +46,17 @@ function love.wheelmoved(x, y)
     end
 end
 
+function love.update(dt)
+
+end
+
 
 function love.draw()
+    love.graphics.setBackgroundColor(1, 1, 1, 1)
     love.graphics.draw(cursor, love.mouse.getX(), love.mouse.getY(), 0, cursorSizex, cursorSizey)
-    love.graphics.print(hi, 400, 300)
+
+    --this doesnt work yet because i don't know how to assign a script refrance to a variable
+    for content in scene.data do
+        love.graphics.draw(content.img, content.x, content.y, 0, content.sx, content.sy)
+    end
 end
