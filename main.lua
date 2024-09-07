@@ -1,3 +1,9 @@
+local cursorSizex = 0.1
+local cursorSizey = 0.1
+local cursor = nil
+local scaler = 0.01
+local hi = "no"
+
 function love.load()
     love.window.setFullscreen(true, "desktop")
     cursor = love.graphics.newImage("/pointer.png")
@@ -7,14 +13,12 @@ function love.load()
     love.mouse.setVisible(false)
     love.mouse.setGrabbed(true)
 
-    scaler = 0.01
-    hi = "no"
 end
 
 function love.keypressed(key, scancode, isrepeat)
 	if key == "escape" then
 		love.window.close( )
-	end        
+	end
 end
 
 function love.wheelmoved(x, y)
