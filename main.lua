@@ -2,7 +2,7 @@ local cursorSizex = 0.1
 local cursorSizey = 0.1
 local cursor = nil
 local scaler = 0.01
-scene = nil
+local scene = require("Scene1")
 
 function love.load()
     love.window.setFullscreen(true, "desktop")
@@ -10,7 +10,7 @@ function love.load()
     cursorSizex = 0.1
     cursorSizey = 0.1
     --this is the wrong way to do what I want below :(
-    scene = require "Scene1"
+    scene.load()
 
     love.mouse.setVisible(false)
     love.mouse.setGrabbed(true)
@@ -53,10 +53,11 @@ end
 
 function love.draw()
     love.graphics.setBackgroundColor(1, 1, 1, 1)
-    love.graphics.draw(cursor, love.mouse.getX(), love.mouse.getY(), 0, cursorSizex, cursorSizey)
 
-    --this doesnt work yet because i don't know how to assign a script refrance to a variable
-    for content in scene.data do
+    -- The reason you have to use pairs is that in Lua, for loops work on a specific data format - pairs turns a table into that data format
+    for _, content in pairs(scene.data) do
         love.graphics.draw(content.img, content.x, content.y, 0, content.sx, content.sy)
     end
+
+    love.graphics.draw(cursor, love.mouse.getX(), love.mouse.getY(), 0, cursorSizex, cursorSizey)
 end
