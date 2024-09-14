@@ -9,7 +9,6 @@ function love.load()
     cursor = love.graphics.newImage("/arts/pointer.png")
     cursorSizex = 0.1
     cursorSizey = 0.1
-    --this is the wrong way to do what I want below :(
     scene.load()
 
     love.mouse.setVisible(false)
