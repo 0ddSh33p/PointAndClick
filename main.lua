@@ -3,6 +3,8 @@ local cursorSizey = 0.1
 local cursor = nil
 local scaler = 0.01
 local scene = require("Scene1")
+
+
 local minCursorSize = 0.01
 local maxCursorSize = 1.0
 
@@ -53,12 +55,14 @@ end
 
 
 function love.draw()
-    love.graphics.setBackgroundColor(1, 1, 1, 1)
+    love.graphics.setBackgroundColor(0, 0, 0, 1)
 
-    -- The reason you have to use pairs is that in Lua, for loops work on a specific data format - pairs turns a table into that data format
-    for _, content in pairs(scene.data) do
+    local a = 1
+    -- changed keys to indicies because the draw order was randomized with the way it was before
+    for index, content in pairs(scene.data) do
         love.graphics.draw(content.img, content.x, content.y, 0, content.sx, content.sy)
     end
 
     love.graphics.draw(cursor, love.mouse.getX(), love.mouse.getY(), 0, cursorSizex, cursorSizey)
+    
 end
