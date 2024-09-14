@@ -3,6 +3,8 @@ local cursorSizey = 0.1
 local cursor = nil
 local scaler = 0.01
 local scene = require("Scene1")
+local minCursorSize = 0.01
+local maxCursorSize = 1.0
 
 function love.load()
     love.window.setFullscreen(true, "desktop")
@@ -31,17 +33,17 @@ function love.wheelmoved(x, y)
         cursorSizey = cursorSizey - scaler
     end
 
-    if cursorSizex < 0.01 then
-        cursorSizex = 0.01
+    if cursorSizex < minCursorSize then
+        cursorSizex = minCursorSize
     end
-    if cursorSizey < 0.01 then
-        cursorSizey = 0.01
+    if cursorSizey < minCursorSize then
+        cursorSizey = minCursorSize
     end
-    if cursorSizex > 1 then
-        cursorSizex = 1
+    if cursorSizex > maxCursorSize then
+        cursorSizex = maxCursorSize
     end
-    if cursorSizey > 1 then
-        cursorSizey = 1
+    if cursorSizey > maxCursorSize then
+        cursorSizey = maxCursorSize
     end
 end
 

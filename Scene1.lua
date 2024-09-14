@@ -16,7 +16,7 @@ function M.load()
             sy = 1
         },
         leftdoor = {
-            img = love.graphics.newImage("/arts/LeftDoorA.png"),
+            img = doorimg,
             x = 0;
             y = height - doorimg:getHeight(),
             sx = 1,
