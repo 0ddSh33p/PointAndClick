@@ -1,4 +1,4 @@
-M = {}
+local M = {}
 -- Misc. functions useful throughout the code
 
 function M.clamp(v, a, b)

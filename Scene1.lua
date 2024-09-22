@@ -1,4 +1,4 @@
-M = {}
+local M = {}
 local width = 0
 local height = 0
 M.data = {}
@@ -46,8 +46,8 @@ function M.load()
             },
             sx = 1,
             sy = 1,
-            interact = function(self, cursorSize, _)
-                if cursorSize > 0.25 then
+            interact = function(self, player)
+                if player.size > 0.3 then
                     self.img = plantBroken
                     self.broken = true
                 else
