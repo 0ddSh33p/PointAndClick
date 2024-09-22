@@ -46,8 +46,8 @@ function M.load()
             },
             sx = 1,
             sy = 1,
-            interact = function(self, cursorSize)
-                if cursorSize > 0.3 then
+            interact = function(self, cursorSize, _)
+                if cursorSize > 0.25 then
                     self.img = plantBroken
                     self.broken = true
                 else

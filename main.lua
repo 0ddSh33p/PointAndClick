@@ -1,11 +1,10 @@
 local cursorSize = 0.1
 local cursor = nil
 local scaler = 0.01
-local utils = require("utils")
 local cursorDimensions = { w = 0, h = 0 }
+local utils = require("utils")
+local player = require("player")
 local scene = require("Scene1")
-local minCursorSize = 0.01
-local maxCursorSize = 1.0
 
 local resolutionX, resolutionY = 1920,1080
 
@@ -38,11 +37,11 @@ function love.wheelmoved(x, y)
         cursorSize = cursorSize - scaler
     end
 
-    if cursorSize < minCursorSize then
-        cursorSize = minCursorSize
+    if cursorSize < player.minCursorSize then
+        cursorSize = player.minCursorSize
     end
-    if cursorSize > maxCursorSize then
-        cursorSize = maxCursorSize
+    if cursorSize > player.maxCursorSize then
+        cursorSize = player.maxCursorSize
     end
 end
 
@@ -50,7 +49,7 @@ function love.mousepressed(x, y, button)
     if button == 1 then -- left mouse button
         for _, content in pairs(scene.data) do
             if utils.pointRectColliding(x / resRatioX, y / resRatioY, content.hitbox) then
-                if content.interact then content:interact(cursorSize) end
+                if content.interact then content:interact(cursorSize, player) end
             end
         end
     end
