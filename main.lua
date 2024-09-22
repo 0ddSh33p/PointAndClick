@@ -1,5 +1,4 @@
-local cursorSizeX = 0.1
-local cursorSizeY = 0.1
+local cursorSize = 0.1
 local cursor = nil
 local scaler = 0.01
 local utils = require("utils")
@@ -15,8 +14,7 @@ local resRatioX, resRatioY = 1920,1080
 function love.load()
     love.window.setFullscreen(true, "desktop")
     cursor = love.graphics.newImage("/arts/pointer.png")
-    cursorSizeX = 0.1
-    cursorSizeY = 0.1
+    cursorSize = 0.1
     local dimensionX, dimensionY = love.graphics.getDimensions()
     resRatioX = dimensionX/resolutionX
     resRatioY = dimensionY/resolutionY
@@ -35,33 +33,24 @@ end
 
 function love.wheelmoved(x, y)
     if y > 0 then
-        cursorSizeX = cursorSizeX + scaler
-        cursorSizeY = cursorSizeY + scaler
+        cursorSize = cursorSize + scaler
     elseif y < 0 then
-        cursorSizeX = cursorSizeX - scaler
-        cursorSizeY = cursorSizeY - scaler
+        cursorSize = cursorSize - scaler
     end
 
-    if cursorSizeX < minCursorSize then
-        cursorSizeX = minCursorSize
+    if cursorSize < minCursorSize then
+        cursorSize = minCursorSize
     end
-    if cursorSizeY < minCursorSize then
-        cursorSizeY = minCursorSize
+    if cursorSize > maxCursorSize then
+        cursorSize = maxCursorSize
     end
-    if cursorSizeX > maxCursorSize then
-        cursorSizeX = maxCursorSize
-    end
-    if cursorSizeY > maxCursorSize then
-        cursorSizeY = maxCursorSize
-    end
-
 end
 
 function love.mousepressed(x, y, button)
     if button == 1 then -- left mouse button
         for _, content in pairs(scene.data) do
             if utils.pointRectColliding(x / resRatioX, y / resRatioY, content.hitbox) then
-                if content.interact then content:interact(cursorSizeX, cursorSizeY) end
+                if content.interact then content:interact(cursorSize) end
             end
         end
     end
@@ -75,5 +64,5 @@ function love.draw()
         love.graphics.draw(content.img, content.hitbox.x * resRatioX, content.hitbox.y * resRatioY, 0, content.sx*resRatioX, content.sy*resRatioY)
     end
 
-    love.graphics.draw(cursor, love.mouse.getX(), love.mouse.getY(), 0, cursorSizeX, cursorSizeY)
+    love.graphics.draw(cursor, love.mouse.getX(), love.mouse.getY(), 0, cursorSize*resRatioX, cursorSize*resRatioY)
 end
