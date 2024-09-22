@@ -21,4 +21,11 @@ function M.aabbColliding(a, b) -- assume a and b are AABBs with x, y, w, h (PLEA
 
 end
 
+function M.pointRectColliding(x, y, rect)
+    return x > rect.x and
+           x < rect.x + rect.w and
+           y > rect.y and
+           y < rect.y + rect.h
+end
+
 return M

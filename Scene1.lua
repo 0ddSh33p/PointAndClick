@@ -45,7 +45,7 @@ function M.load()
             },
             sx = 1,
             sy = 1,
-            interact = function(self)
+            interact = function(self, cursorSizeX, cursorSizeY)
                 self.hitbox.x = self.hitbox.x + 50
             end
         },
