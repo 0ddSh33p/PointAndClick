@@ -59,10 +59,9 @@ function love.draw()
 
     local a = 1
     -- changed keys to indicies because the draw order was randomized with the way it was before
-    for index, content in pairs(scene.data) do
+    for _, content in pairs(scene.data) do
         love.graphics.draw(content.img, content.x, content.y, 0, content.sx, content.sy)
     end
 
     love.graphics.draw(cursor, love.mouse.getX(), love.mouse.getY(), 0, cursorSizex, cursorSizey)
-    
 end
