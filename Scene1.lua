@@ -4,11 +4,10 @@ local height = 0
 M.data = {}
 
 function M.load()
-    width, height = love.graphics.getDimensions( )
-
     local doorimg = love.graphics.newImage("/arts/LeftDoorA.png")
     local plantNormal = love.graphics.newImage("/arts/plantA.png")
     local bgimg = love.graphics.newImage("/arts/RoomA.png")
+    local ratioY = height/bgimg:getHeight()
 
     M.data = {
         {
@@ -28,7 +27,7 @@ function M.load()
             img = doorimg,
             hitbox = {
             x = 15,
-            y = height - doorimg:getHeight() - 385,
+            y = 1080 - doorimg:getHeight() - 20,
             w = doorimg:getWidth(),
             h = doorimg:getHeight()
             },
