@@ -14,7 +14,7 @@ function love.load()
     resRatioX = dimensionX/resolutionX
     resRatioY = dimensionY/resolutionY
     scene.load()
-    --player.load()
+    player.load()
 
     love.mouse.setVisible(false)
     love.mouse.setGrabbed(true)
@@ -31,8 +31,12 @@ function love.keypressed(key, _, _)
 	end
 end
 
+function love.update(dt)
+    player.update(dt)
+end
 
 function love.mousepressed(x, y, button)
+
     if button == 1 then -- left mouse button
         for _, content in pairs(scene.data) do
             if utils.pointRectColliding(x / resRatioX, y / resRatioY, content.hitbox) then
@@ -49,7 +53,6 @@ function love.draw()
     for _, content in pairs(scene.data) do
         love.graphics.draw(content.img, content.hitbox.x * resRatioX, content.hitbox.y * resRatioY, 0, content.sx*resRatioX, content.sy*resRatioY)
     end
-
-
+    player.draw()
     love.graphics.draw(cursor, love.mouse.getX(), love.mouse.getY(), 0, 0.75*resRatioX, 0.75*resRatioY)
 end

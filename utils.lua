@@ -28,4 +28,13 @@ function M.pointRectColliding(x, y, rect)
            y < rect.y + rect.h
 end
 
+function M.length(x, y)
+
+    return math.sqrt(x*x + y*y)
+end
+
+function M.distance(x1, y1, x2, y2)
+    return M.length(x2-x1, y2-y1)
+end
+
 return M

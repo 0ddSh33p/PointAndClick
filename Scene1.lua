@@ -47,7 +47,7 @@ function M.load()
             sx = 1,
             sy = 1,
             interact = function(self, player)
-                if player.size > 0.3 then
+                if player.size > 0.5 then
                     self.img = plantBroken
                     self.broken = true
                 else
