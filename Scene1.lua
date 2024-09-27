@@ -20,7 +20,7 @@ function M.load()
             h = bgimg:getHeight()
             },
             sx = 1,
-            sy = 1
+            sy = 1,
         },
         {
             name = "leftDoor",
@@ -32,7 +32,7 @@ function M.load()
             h = doorimg:getHeight()
             },
             sx = 1,
-            sy = 1
+            sy = 1,
         },
         {
             name = "plant",
@@ -53,7 +53,9 @@ function M.load()
                 else
                     if not self.broken then self.hitbox.x = self.hitbox.x + 50 end
                 end
-            end
+            end,
+            interactDist = 0,
+            interactAnchor = {plantNormal:getWidth()/2, plantNormal:getHeight()/2}
         },
     }
 end

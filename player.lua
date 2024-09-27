@@ -7,6 +7,7 @@ M.hitbox = { x = 0, y = 0, w = 0, h = 0 } -- for EXTERNAL stuff -collision check
 M.minSize = 0.01
 M.maxSize = 1.0
 M.size = 0.3
+M.currentTarget = nil
 
 local utils = require('utils')
 local spritesheet = require('spritesheet')
@@ -52,7 +53,7 @@ local function getScale() -- gets the amount the texture should be scaled, depen
     return M.size
 end
 
-local function goToCursor(x,y, dt)
+local function goToPt(x,y, dt)
     local dist = utils.distance(fifeX, fifeY, x, y)
     if dist > 5 then
         fVeloX = ((x - fifeX)/dist)*speed*dt
@@ -63,15 +64,39 @@ local function goToCursor(x,y, dt)
     end
 end
 
+local function interact(obj, dt)
+    -- unfinished and bad, probably temporary
+    local ox = obj.hitbox.x + obj.interactAnchor[1]
+    local oy = obj.hitbox.y + obj.interactAnchor[2]
+    local tx = obj.hitbox.x + obj.interactAnchor[1]
+    local ty = obj.hitbox.y + obj.interactAnchor[2]
+    local dist = utils.distance(fifeX, fifeY, tx, ty)
+    local away = 0
+    if obj.interactDist then away = obj.interactDist end
+    if dist > away then
+        fVeloX = ((tx-fifeX)/dist)*speed*dt
+        fVeloY = ((ty - fifeY)/dist)*speed*dt
+    else
+        if obj.interact then obj:interact(M) end
+        M.currentTarget = nil
+        targetX = fifeX
+        targetY = fifeY
+        fVeloX = 0
+        fVeloY = 0
+    end
+end
+
 function M.update(dt)
     -- animation code updating
     spritesheet.update(fifeSS, dt)
 
-    if love.mouse.isDown(1) then
+
+    -- doesnt work
+    if M.currentTarget == nil then goToPt(targetX, targetY, dt) else interact(M.currentTarget, dt) end
+
+    if love.mouse.isDown(1) and M.currentTarget == nil then
         targetX, targetY = love.mouse.getX(), love.mouse.getY()
     end
-
-    goToCursor(targetX, targetY, dt)
     fifeX = fifeX + fVeloX
     fifeY = fifeY + fVeloY
     M.hitbox.x = fifeX - ((fifeSS.spriteWidth/2)*getScale())

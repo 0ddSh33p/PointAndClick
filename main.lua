@@ -40,7 +40,11 @@ function love.mousepressed(x, y, button)
     if button == 1 then -- left mouse button
         for _, content in pairs(scene.data) do
             if utils.pointRectColliding(x / resRatioX, y / resRatioY, content.hitbox) then
-                if content.interact then content:interact(player) end
+                if content.interact then
+                    player.currentTarget = content
+                else
+                    player.currentTarget = nil
+                end
             end
         end
     end
