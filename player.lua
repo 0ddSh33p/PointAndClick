@@ -66,24 +66,24 @@ end
 
 local function interact(obj, dt)
     -- unfinished and bad, probably temporary
-    local ox = obj.hitbox.x + obj.interactAnchor[1]
-    local oy = obj.hitbox.y + obj.interactAnchor[2]
-    local tx = obj.hitbox.x + obj.interactAnchor[1]
-    local ty = obj.hitbox.y + obj.interactAnchor[2]
-    local dist = utils.distance(fifeX, fifeY, tx, ty)
-    local away = 0
-    if obj.interactDist then away = obj.interactDist end
-    if dist > away then
-        fVeloX = ((tx-fifeX)/dist)*speed*dt
-        fVeloY = ((ty - fifeY)/dist)*speed*dt
-    else
-        if obj.interact then obj:interact(M) end
-        M.currentTarget = nil
-        targetX = fifeX
-        targetY = fifeY
-        fVeloX = 0
-        fVeloY = 0
-    end
+    --local ox = obj.hitbox.x + obj.interactAnchor[1]
+    --local oy = obj.hitbox.y + obj.interactAnchor[2]
+    --local tx = obj.hitbox.x + obj.interactAnchor[1]
+    --local ty = obj.hitbox.y + obj.interactAnchor[2]
+    --local dist = utils.distance(fifeX, fifeY, tx, ty)
+    --local away = 0
+    --if obj.interactDist then away = obj.interactDist end
+    --if dist > away then
+    --    fVeloX = ((tx-fifeX)/dist)*speed*dt
+    --    fVeloY = ((ty - fifeY)/dist)*speed*dt
+    --else
+    --    if obj.interact then obj:interact(M) end
+    --    M.currentTarget = nil
+    --    targetX = fifeX
+    --    targetY = fifeY
+    --    fVeloX = 0
+    --    fVeloY = 0
+    --end
 end
 
 function M.update(dt)
