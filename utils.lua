@@ -58,7 +58,26 @@ function M.pointParallelogramColliding(px, py, ax, ay, bx, by, cx, cy, dx, dy)
     return halfColliding(ax,ay,bx,by,cx,cy) or halfColliding(cx,cy,dx,dy,ax,ay)
 end
 
-
-
+function M.raymarch(px, py, vx, vy, obj, objs)
+    local len = M.distance(px, py, obj.hitbox.x + obj.interactOrigin[1], obj.hitbox.y + obj.interactOrigin[2])
+    local currentLen = 0
+    local advance = 10 -- advances by 10 units per iteration
+    local currentX = px
+    local currentY = py
+    local result = {}
+    local matches = 0
+    while currentLen < len do
+        currentLen = currentLen + advance
+        currentX = currentX + math.sqrt(advance - (vx*vx))
+        currentY = currentY + math.sqrt(advance - (vy*vy))
+        for _, o in pairs(objs) do
+            if M.pointRectColliding(currentX, currentY, o.hitbox) then
+                matches = matches + 1
+                table.insert(result, matches, o)
+            end
+        end
+    end
+    return result
+end
 
 return M

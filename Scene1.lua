@@ -54,8 +54,8 @@ function M.load()
                     if not self.broken then self.hitbox.x = self.hitbox.x + 50 end
                 end
             end,
-            interactDist = 0,
-            interactAnchor = {plantNormal:getWidth()/2, plantNormal:getHeight()/2}
+            interactDist = 50,
+            interactOrigin = {plantNormal:getWidth()/2, plantNormal:getHeight()/2}
         },
     }
 end
