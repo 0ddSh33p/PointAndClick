@@ -41,9 +41,13 @@ function M.load()
             },
             sx = 1,
             sy = 1,
-            interact = function(self, player) 
+            interact = function(self, player)
             -- ADD STUFF TO INTERACT
-            end
+            end,
+            interactOrigin = {
+            [1] = box:getWidth()/2,
+            [2] = box:getHeight()/2
+            }
         },
     }
     M.floors = {

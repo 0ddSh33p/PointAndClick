@@ -58,8 +58,8 @@ end
 local function goToPt(x,y, sceneData, dt)
     local dist = utils.distance(fifeX, fifeY, x, y)
     if dist > 5 then
-        if currentTarget ~= nil then
-            if utils.raymarchObj(fifeX,fifeY,currentTarget,sceneData) == nil then
+        if M.currentTarget ~= nil then
+            if utils.raymarchObj(fifeX,fifeY,M.currentTarget,sceneData) == nil then
                 fVeloX = ((x - fifeX)/dist)*speed*dt
                 fVeloY = ((y - fifeY)/dist)*speed*dt
             end
@@ -67,7 +67,13 @@ local function goToPt(x,y, sceneData, dt)
             if utils.raymarchPt(fifeX,fifeY,x,y,sceneData) == nil then
                 fVeloX = ((x - fifeX)/dist)*speed*dt
                 fVeloY = ((y - fifeY)/dist)*speed*dt
+                print("E")
             end
+            --local r = utils.raymarchPt(fifeX, fifeY, x,y, sceneData)
+            --if r == nil then r = {} end
+            --for _, value in pairs(r) do
+            --    print(value.name)
+            --end
         end
     else
         fVeloX = 0
@@ -112,6 +118,7 @@ function M.update(sceneData, dt)
     fifeY = fifeY + fVeloY
     M.hitbox.x = fifeX - ((fifeSS.spriteWidth/2)*getScale())
     M.hitbox.y = fifeY - (fifeSS.spriteHeight*getScale())
+
 end
 
 
