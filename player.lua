@@ -28,6 +28,8 @@ function M.load()
     spritesheet.setAnimation(fifeSS, 'idle')
     M.hitbox.w = fifeSS.spriteWidth*M.size
     M.hitbox.h = fifeSS.spriteHeight*M.size
+    fifeX = 400
+    fifeY = 400
 end
 
 function love.wheelmoved(_,y)
@@ -53,11 +55,20 @@ local function getScale() -- gets the amount the texture should be scaled, depen
     return M.size
 end
 
-local function goToPt(x,y, dt)
+local function goToPt(x,y, sceneData, dt)
     local dist = utils.distance(fifeX, fifeY, x, y)
     if dist > 5 then
-        fVeloX = ((x - fifeX)/dist)*speed*dt
-        fVeloY = ((y - fifeY)/dist)*speed*dt
+        if currentTarget ~= nil then
+            if utils.raymarchObj(fifeX,fifeY,currentTarget,sceneData) == nil then
+                fVeloX = ((x - fifeX)/dist)*speed*dt
+                fVeloY = ((y - fifeY)/dist)*speed*dt
+            end
+        else
+            if utils.raymarchPt(fifeX,fifeY,x,y,sceneData) == nil then
+                fVeloX = ((x - fifeX)/dist)*speed*dt
+                fVeloY = ((y - fifeY)/dist)*speed*dt
+            end
+        end
     else
         fVeloX = 0
         fVeloY = 0
@@ -86,13 +97,13 @@ local function interact(obj, dt)
     --end
 end
 
-function M.update(dt)
+function M.update(sceneData, dt)
     -- animation code updating
     spritesheet.update(fifeSS, dt)
 
 
-    -- doesnt work
-    if M.currentTarget == nil then goToPt(targetX, targetY, dt) else interact(M.currentTarget, dt) end
+    -- does work
+    goToPt(targetX, targetY, sceneData, dt)
 
     if love.mouse.isDown(1) and M.currentTarget == nil then
         targetX, targetY = love.mouse.getX(), love.mouse.getY()

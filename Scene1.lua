@@ -4,10 +4,8 @@ local height = 0
 M.data = {}
 
 function M.load()
-    local doorimg = love.graphics.newImage("/arts/LeftDoorA.png")
-    local plantNormal = love.graphics.newImage("/arts/plantA.png")
-    local plantBroken = love.graphics.newImage("/arts/brokenPlantA.png")
-    local bgimg = love.graphics.newImage("/arts/RoomA.png")
+    local box = love.graphics.newImage("/arts/box.png")
+    local bgimg = love.graphics.newImage("/arts/placeholderBG.png")
 
     M.data = {
         {
@@ -23,40 +21,42 @@ function M.load()
             sy = 1,
         },
         {
-            name = "leftDoor",
-            img = doorimg,
+            name = "box",
+            img = box,
             hitbox = {
-            x = 15,
-            y = 1080 - doorimg:getHeight() - 20,
-            w = doorimg:getWidth(),
-            h = doorimg:getHeight()
+            x = 780,
+            y = 540,
+            w = box:getWidth(),
+            h = box:getHeight(),
+            },
+            parallelogram = {
+            pax = 170,
+            pay = 162,
+            pbx = 340,
+            pby = 240,
+            pcx = 170,
+            pcy = 322,
+            pdx = 0,
+            pdy = 240
             },
             sx = 1,
             sy = 1,
+            interact = function(self, player) 
+            -- ADD STUFF TO INTERACT
+            end
         },
-        {
-            name = "plant",
-            img = plantNormal,
-            broken = false,
-            hitbox = {
-            x = 1200,
-            y = 780,
-            w = plantNormal:getWidth(),
-            h = plantNormal:getHeight()
-            },
-            sx = 1,
-            sy = 1,
-            interact = function(self, player)
-                if player.size > 0.5 then
-                    self.img = plantBroken
-                    self.broken = true
-                else
-                    if not self.broken then self.hitbox.x = self.hitbox.x + 50 end
-                end
-            end,
-            interactDist = 50,
-            interactOrigin = {plantNormal:getWidth()/2, plantNormal:getHeight()/2}
-        },
+    }
+    M.floors = {
+        parallelogram = {
+        pax = 0,
+        pay = 0,
+        pbx = 0,
+        pby = 1080,
+        pcx = 1920,
+        pcy = 1080,
+        pdx = 1920,
+        pdy = 0
+        }
     }
 end
 

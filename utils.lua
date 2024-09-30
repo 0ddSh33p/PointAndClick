@@ -73,7 +73,7 @@ function M.raymarchObj(px, py, target, objs)
         currentX = currentX + math.sqrt(advance - (vx*vx))
         currentY = currentY + math.sqrt(advance - (vy*vy))
         for _, o in pairs(objs) do
-            if o ~= target and M.pointRectColliding(currentX, currentY, o.hitbox) then
+            if o ~= target and M.pointRectColliding(currentX, currentY, o.hitbox) and o.interact then
                 matches = matches + 1
                 table.insert(result, matches, o)
             end
@@ -97,7 +97,7 @@ function M.raymarchPt(px, py, tx, ty, objs)
         currentX = currentX + math.sqrt(advance - (vx*vx))
         currentY = currentY + math.sqrt(advance - (vy*vy))
         for _, o in pairs(objs) do
-            if M.pointRectColliding(currentX, currentY, o.hitbox) then
+            if M.pointRectColliding(currentX, currentY, o.hitbox) and o.interact then
                 matches = matches + 1
                 table.insert(result, matches, o)
             end

@@ -2,7 +2,7 @@ local M = {}
 
 local fps = 12
 
- function M.load(texturePath, frameCount, animTable)
+function M.load(texturePath, frameCount, animTable)
     local result = {}
     result.texture = love.graphics.newImage(texturePath)
     result.frameCount = frameCount
@@ -21,7 +21,7 @@ local fps = 12
     return result;
 end
 
- function M.setAnimation(ss, animName)
+function M.setAnimation(ss, animName)
     ss.startFrame = ss.animTable[animName][1]
     ss.endFrame = ss.animTable[animName][2]
 end

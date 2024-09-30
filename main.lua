@@ -5,7 +5,7 @@ local scene = require("Scene1")
 
 local resolutionX, resolutionY = 1920,1080
 
-local resRatioX, resRatioY = 1920,1080
+local resRatioX, resRatioY = 1,1
 
 function love.load()
     love.window.setFullscreen(true, "desktop")
@@ -32,7 +32,7 @@ function love.keypressed(key, _, _)
 end
 
 function love.update(dt)
-    player.update(dt)
+    player.update(scene.data,dt)
 end
 
 function love.mousepressed(x, y, button)
@@ -43,7 +43,7 @@ function love.mousepressed(x, y, button)
                 if content.interact then
                     player.currentTarget = content
                 else
-                    player.currentTarget = nil
+                    player.currentTarget = nil 
                 end
             end
         end
