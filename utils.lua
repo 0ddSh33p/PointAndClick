@@ -79,6 +79,7 @@ function M.raymarchObj(px, py, target, objs)
             end
         end
     end
+    if matches == 0 then result = nil end
     return result
 end
 
@@ -103,6 +104,8 @@ function M.raymarchPt(px, py, tx, ty, objs)
             end
         end
     end
+    if matches == 0 then result = nil end
+    print(matches)
     return result
 end
 
