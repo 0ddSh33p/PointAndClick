@@ -9,6 +9,8 @@ M.maxSize = 1.0
 M.size = 0.3
 M.currentTarget = nil
 
+M.debugTXT = "nil"
+
 local utils = require('utils')
 local spritesheet = require('spritesheet')
 local animTable
@@ -55,7 +57,21 @@ local function getScale() -- gets the amount the texture should be scaled, depen
     return M.size
 end
 
-local function goToPt(x,y, sceneData, dt)
+local function goToPt(mX,mY, sceneData, dt)
+    local x, y
+    if currentTarget ~= nil then
+        x = currentTarget.hitbox.x 
+        y = currentTarget.hitbox.y
+    else
+        x, y = mX, mY
+    end
+
+    --if currentTarget ~= nil then
+    --   debugText = "moving to "..currentTarget.name
+    --else
+    --    debugText = "moving to "..x .." "..y
+    --end
+
     local dist = utils.distance(fifeX, fifeY, x, y)
     if dist > 5 then
         if currentTarget ~= nil then
@@ -97,17 +113,28 @@ local function interact(obj, dt)
     --end
 end
 
+function M.setClicked(object)
+    currentTarget = object
+end
+
 function M.update(sceneData, dt)
+
+    if currentTarget == nil then
+        debugText = "nothing selected"
+    else
+        debugText = "selected on "..currentTarget.name
+    end
+
     -- animation code updating
     spritesheet.update(fifeSS, dt)
 
 
     -- does work
-    goToPt(targetX, targetY, sceneData, dt)
-
-    if love.mouse.isDown(1) and M.currentTarget == nil then
+    if love.mouse.isDown(1) then
         targetX, targetY = love.mouse.getX(), love.mouse.getY()
     end
+    goToPt(targetX, targetY, sceneData, dt)
+
     fifeX = fifeX + fVeloX
     fifeY = fifeY + fVeloY
     M.hitbox.x = fifeX - ((fifeSS.spriteWidth/2)*getScale())

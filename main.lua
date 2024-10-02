@@ -7,6 +7,8 @@ local resolutionX, resolutionY = 1920,1080
 
 local resRatioX, resRatioY = 1,1
 
+debugText = "ground"
+
 function love.load()
     love.window.setFullscreen(true, "desktop")
     cursor = love.graphics.newImage("/arts/mousecursor.png")
@@ -41,9 +43,9 @@ function love.mousepressed(x, y, button)
         for _, content in pairs(scene.data) do
             if utils.pointRectColliding(x / resRatioX, y / resRatioY, content.hitbox) then
                 if content.interact then
-                    player.currentTarget = content
+                    player.setClicked(content)
                 else
-                    player.currentTarget = nil 
+                    player.setClicked(nil)
                 end
             end
         end
@@ -58,5 +60,11 @@ function love.draw()
         love.graphics.draw(content.img, content.hitbox.x * resRatioX, content.hitbox.y * resRatioY, 0, content.sx*resRatioX, content.sy*resRatioY)
     end
     player.draw()
+
+    love.graphics.setColor({0, 0, 0, 1})
+    love.graphics.print(debugText,1,1)
+    love.graphics.setColor({1, 1, 1, 1})
+
+    
     love.graphics.draw(cursor, love.mouse.getX(), love.mouse.getY(), 0, 0.75*resRatioX, 0.75*resRatioY)
 end

@@ -11,6 +11,7 @@ function M.load()
         {
             name = "bg",
             img = bgimg,
+            distanceBuffer = 0,
             hitbox = {
             x = 0,
             y = 0,
@@ -23,6 +24,7 @@ function M.load()
         {
             name = "box",
             img = box,
+            distanceBuffer = 10,
             hitbox = {
             x = 780,
             y = 540,
