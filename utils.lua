@@ -47,14 +47,15 @@ end
 -- point 'c' is the BOTTOM point
 function M.pointParallelogramColliding(px, py, ax, ay, bx, by, cx, cy, dx, dy)
     local halfColliding =  function (x1,y1,x2,y2,x3,y3)
-    -- I stole this code and I **think** it uses the barycentric coordinate method of detection for triangle-pt collision
-    local alpha = ((y2 - y3)*(px - x3) + (x3 - x2)*(py - y3)) /
-                  ((y2 - y3)*(x1 - x3) + (x3 - x2)*(y1 - y3))
-    local beta = ((y3 - y1)*(px - x3) + (x1 - x3)*(py - y3)) /
-                 ((y2 - y3)*(x1 - x3) + (x3 - x2)*(y1 - y3))
-    local gamma = 1.0 - alpha - beta
-    return ((alpha > 0) and (beta > 0) and (gamma > 0))
+        -- I stole this code and I **think** it uses the barycentric coordinate method of detection for triangle-pt collision
+        local alpha = ((y2 - y3)*(px - x3) + (x3 - x2)*(py - y3)) /
+                    ((y2 - y3)*(x1 - x3) + (x3 - x2)*(y1 - y3))
+        local beta = ((y3 - y1)*(px - x3) + (x1 - x3)*(py - y3)) /
+                    ((y2 - y3)*(x1 - x3) + (x3 - x2)*(y1 - y3))
+        local gamma = 1.0 - alpha - beta
+        return ((alpha > 0) and (beta > 0) and (gamma > 0))
     end
+
     return halfColliding(ax,ay,bx,by,cx,cy) or halfColliding(cx,cy,dx,dy,ax,ay)
 end
 
@@ -68,10 +69,12 @@ function M.raymarchObj(px, py, target, objs)
     local currentY = py
     local result = {}
     local matches = 0
+
     while currentLen < len do
         currentLen = currentLen + advance
         currentX = currentX + math.sqrt(advance - (vx*vx))
         currentY = currentY + math.sqrt(advance - (vy*vy))
+        
         for _, o in pairs(objs) do
             if o ~= target and M.pointRectColliding(currentX, currentY, o.hitbox) and o.interact then
                 matches = matches + 1
@@ -93,10 +96,12 @@ function M.raymarchPt(px, py, tx, ty, objs)
     local currentY = py
     local result = {}
     local matches = 0
+
     while currentLen < len do
         currentLen = currentLen + advance
         currentX = currentX + math.sqrt(advance - (vx*vx))
         currentY = currentY + math.sqrt(advance - (vy*vy))
+
         for _, o in pairs(objs) do
             if M.pointRectColliding(currentX, currentY, o.hitbox) and o.interact then
                 matches = matches + 1
@@ -107,6 +112,20 @@ function M.raymarchPt(px, py, tx, ty, objs)
     if matches == 0 then result = nil end
     print(matches)
     return result
+end
+
+function M.checkFront (fifeX, fifeY, vectX, vectY, ignoreObj, sceneObjs) 
+    local distFromOrigin = 5
+    local checkX = fifeX + (vectX*distFromOrigin)
+    local checkY = fifeY + (vectY*distFromOrigin)
+    local object = nil
+
+    for _, o in pairs(sceneObjs) do
+        if o.interact and o ~= ignoreObj and M.pointParallelogramColliding(checkX,checkY, o.hitbox.x + o.parallelogram.ax, o.hitbox.y + o.parallelogram.ay, o.hitbox.x + o.parallelogram.bx, o.hitbox.y + o.parallelogram.by, o.hitbox.x + o.parallelogram.cx, o.hitbox.y + o.parallelogram.cy, o.hitbox.x + o.parallelogram.dx, o.hitbox.y + o.parallelogram.dy) then
+            object = o
+        end
+    end
+    return object
 end
 
 return M

@@ -21,35 +21,40 @@ function M.load()
             sx = 1,
             sy = 1,
         },
+
         {
             name = "box",
             img = box,
-            distanceBuffer = 10,
+            distanceBuffer = 250,
+            sx = 1,
+            sy = 1,
+
             hitbox = {
             x = 780,
             y = 540,
             w = box:getWidth(),
             h = box:getHeight(),
             },
+
             parallelogram = {
-            pax = 170,
-            pay = 162,
-            pbx = 340,
-            pby = 240,
-            pcx = 170,
-            pcy = 322,
-            pdx = 0,
-            pdy = 240
+                ax = 170,
+                ay = 162,
+                bx = 340,
+                by = 240,
+                cx = 170,
+                cy = 322,
+                dx = 0,
+                dy = 240
             },
-            sx = 1,
-            sy = 1,
-            interact = function(self, player)
-            -- ADD STUFF TO INTERACT
-            end,
+            
             interactOrigin = {
             [1] = box:getWidth()/2,
             [2] = box:getHeight()/2
-            }
+            },
+
+            interact = function(self, player)
+                -- ADD STUFF TO INTERACT
+            end
         },
     }
     M.floors = {

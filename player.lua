@@ -9,8 +9,6 @@ M.maxSize = 1.0
 M.size = 0.3
 M.currentTarget = nil
 
-M.debugTXT = "nil"
-
 local utils = require('utils')
 local spritesheet = require('spritesheet')
 local animTable
@@ -32,6 +30,8 @@ function M.load()
     M.hitbox.h = fifeSS.spriteHeight*M.size
     fifeX = 400
     fifeY = 400
+    targetX = fifeX
+    targetY = fifeY
 end
 
 function love.wheelmoved(_,y)
@@ -59,37 +59,48 @@ end
 
 local function goToPt(mX,mY, sceneData, dt)
     local x, y
+    local errorMargin
+    local objInWay = nil
     if currentTarget ~= nil then
-        x = currentTarget.hitbox.x 
-        y = currentTarget.hitbox.y
+        x = currentTarget.hitbox.x+currentTarget.interactOrigin[1]
+        y = currentTarget.hitbox.y+currentTarget.interactOrigin[2]
+        errorMargin = currentTarget.distanceBuffer
     else
         x, y = mX, mY
+        errorMargin = 5
     end
-
-    --if currentTarget ~= nil then
-    --   debugText = "moving to "..currentTarget.name
-    --else
-    --    debugText = "moving to "..x .." "..y
-    --end
-
+    
     local dist = utils.distance(fifeX, fifeY, x, y)
-    if dist > 5 then
-        if M.currentTarget ~= nil then
-            if utils.raymarchObj(fifeX,fifeY,M.currentTarget,sceneData) == nil then
-                fVeloX = ((x - fifeX)/dist)*speed*dt
-                fVeloY = ((y - fifeY)/dist)*speed*dt
+    
+
+    if dist > errorMargin then
+
+        objInWay = utils.checkFront(fifeX,fifeY, (x - fifeX)/dist,(y - fifeY)/dist, currentTarget, sceneData)
+        debugText = "x: "..fifeX.." y: "..fifeY
+        
+        if objInWay ~= nil then
+            --jenky garbage that techniocally works
+            if fVeloX > fVeloY then
+                if fifeY > 540 then
+                    fVeloX = 0
+                    fVeloY = ((y - fifeY)/dist + (objInWay.hitbox.h*dt))*speed*dt
+                else
+                    fVeloX = 0
+                    fVeloY = ((y - fifeY)/dist - (objInWay.hitbox.h*dt))*speed*dt
+                end
+            else
+                if fifeX > 960 then
+                    fVeloX = ((x - fifeX)/dist + (objInWay.hitbox.w*dt))*speed*dt
+                    fVeloY = 0
+                else
+                    fVeloX = ((x - fifeX)/dist - (objInWay.hitbox.w*dt))*speed*dt
+                    fVeloY = 0
+                end
             end
+            -- end of garbo
         else
-            if utils.raymarchPt(fifeX,fifeY,x,y,sceneData) == nil then
-                fVeloX = ((x - fifeX)/dist)*speed*dt
-                fVeloY = ((y - fifeY)/dist)*speed*dt
-                print("E")
-            end
-            --local r = utils.raymarchPt(fifeX, fifeY, x,y, sceneData)
-            --if r == nil then r = {} end
-            --for _, value in pairs(r) do
-            --    print(value.name)
-            --end
+            fVeloX = ((x - fifeX)/dist)*speed*dt
+            fVeloY = ((y - fifeY)/dist)*speed*dt
         end
     else
         fVeloX = 0
@@ -97,40 +108,11 @@ local function goToPt(mX,mY, sceneData, dt)
     end
 end
 
-local function interact(obj, dt)
-    -- unfinished and bad, probably temporary
-    --local ox = obj.hitbox.x + obj.interactAnchor[1]
-    --local oy = obj.hitbox.y + obj.interactAnchor[2]
-    --local tx = obj.hitbox.x + obj.interactAnchor[1]
-    --local ty = obj.hitbox.y + obj.interactAnchor[2]
-    --local dist = utils.distance(fifeX, fifeY, tx, ty)
-    --local away = 0
-    --if obj.interactDist then away = obj.interactDist end
-    --if dist > away then
-    --    fVeloX = ((tx-fifeX)/dist)*speed*dt
-    --    fVeloY = ((ty - fifeY)/dist)*speed*dt
-    --else
-    --    if obj.interact then obj:interact(M) end
-    --    M.currentTarget = nil
-    --    targetX = fifeX
-    --    targetY = fifeY
-    --    fVeloX = 0
-    --    fVeloY = 0
-    --end
-end
-
 function M.setClicked(object)
     currentTarget = object
 end
 
 function M.update(sceneData, dt)
-
-    if currentTarget == nil then
-        debugText = "nothing selected"
-    else
-        debugText = "selected on "..currentTarget.name
-    end
-
     -- animation code updating
     spritesheet.update(fifeSS, dt)
 
