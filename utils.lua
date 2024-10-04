@@ -59,62 +59,7 @@ function M.pointParallelogramColliding(px, py, ax, ay, bx, by, cx, cy, dx, dy)
     return halfColliding(ax,ay,bx,by,cx,cy) or halfColliding(cx,cy,dx,dy,ax,ay)
 end
 
-function M.raymarchObj(px, py, target, objs)
-    local len = M.distance(px, py, target.hitbox.x + target.interactOrigin[1], target.hitbox.y + target.interactOrigin[2])
-    local vx = (((target.hitbox.x + target.interactOrigin[1]) - px)/len)
-    local vy = (((target.hitbox.y + target.interactOrigin[2]) - py)/len)
-    local currentLen = 0
-    local advance = 10 -- advances by 10 units per iteration
-    local currentX = px
-    local currentY = py
-    local result = {}
-    local matches = 0
-
-    while currentLen < len do
-        currentLen = currentLen + advance
-        currentX = currentX + math.sqrt(advance - (vx*vx))
-        currentY = currentY + math.sqrt(advance - (vy*vy))
-        
-        for _, o in pairs(objs) do
-            if o ~= target and M.pointRectColliding(currentX, currentY, o.hitbox) and o.interact then
-                matches = matches + 1
-                table.insert(result, matches, o)
-            end
-        end
-    end
-    if matches == 0 then result = nil end
-    return result
-end
-
-function M.raymarchPt(px, py, tx, ty, objs)
-    local len = M.distance(px, py, tx, ty)
-    local vx = (tx - px)/len
-    local vy = (ty - py)/len
-    local currentLen = 0
-    local advance = 10 -- advances by 10 units per iteration
-    local currentX = px
-    local currentY = py
-    local result = {}
-    local matches = 0
-
-    while currentLen < len do
-        currentLen = currentLen + advance
-        currentX = currentX + math.sqrt(advance - (vx*vx))
-        currentY = currentY + math.sqrt(advance - (vy*vy))
-
-        for _, o in pairs(objs) do
-            if M.pointRectColliding(currentX, currentY, o.hitbox) and o.interact then
-                matches = matches + 1
-                table.insert(result, matches, o)
-            end
-        end
-    end
-    if matches == 0 then result = nil end
-    print(matches)
-    return result
-end
-
-function M.checkFront (fifeX, fifeY, vectX, vectY, ignoreObj, sceneObjs) 
+function M.checkFront (fifeX, fifeY, vectX, vectY, ignoreObj, sceneObjs)
     local distFromOrigin = 5
     local checkX = fifeX + (vectX*distFromOrigin)
     local checkY = fifeY + (vectY*distFromOrigin)

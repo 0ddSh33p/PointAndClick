@@ -61,27 +61,24 @@ local function goToPt(mX,mY, sceneData, dt)
     local x, y
     local errorMargin
     local objInWay = nil
-    if currentTarget ~= nil then
-        x = currentTarget.hitbox.x+currentTarget.interactOrigin[1]
-        y = currentTarget.hitbox.y+currentTarget.interactOrigin[2]
-        errorMargin = currentTarget.distanceBuffer
+    if M.currentTarget ~= nil then
+        x = M.currentTarget.hitbox.x+M.currentTarget.interactOrigin[1]
+        y = M.currentTarget.hitbox.y+M.currentTarget.interactOrigin[2]
+        errorMargin = M.currentTarget.distanceBuffer
     else
         x, y = mX, mY
         errorMargin = 5
     end
-    
     local dist = utils.distance(fifeX, fifeY, x, y)
-    
-
     if dist > errorMargin then
 
-        objInWay = utils.checkFront(fifeX,fifeY, (x - fifeX)/dist,(y - fifeY)/dist, currentTarget, sceneData)
+        objInWay = utils.checkFront(fifeX,fifeY, (x - fifeX)/dist,(y - fifeY)/dist, M.currentTarget, sceneData)
         debugText = "x: "..fifeX.." y: "..fifeY
-        
         if objInWay ~= nil then
+            local screenX, screenY = love.graphics.getDimensions()
             --jenky garbage that techniocally works
             if fVeloX > fVeloY then
-                if fifeY > 540 then
+                if fifeY > screenX then
                     fVeloX = 0
                     fVeloY = ((y - fifeY)/dist + (objInWay.hitbox.h*dt))*speed*dt
                 else
@@ -89,7 +86,7 @@ local function goToPt(mX,mY, sceneData, dt)
                     fVeloY = ((y - fifeY)/dist - (objInWay.hitbox.h*dt))*speed*dt
                 end
             else
-                if fifeX > 960 then
+                if fifeX > screenY then
                     fVeloX = ((x - fifeX)/dist + (objInWay.hitbox.w*dt))*speed*dt
                     fVeloY = 0
                 else
@@ -109,7 +106,7 @@ local function goToPt(mX,mY, sceneData, dt)
 end
 
 function M.setClicked(object)
-    currentTarget = object
+    M.currentTarget = object
 end
 
 function M.update(sceneData, dt)
