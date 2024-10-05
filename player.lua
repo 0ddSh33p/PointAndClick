@@ -20,6 +20,9 @@ local targetX, targetY = 0, 0
 local fifeX, fifeY = 0,0 -- internal x and y - where fife's feet are
 local fVeloX, fVeloY = 0,0
 
+local sqrt2 = 0
+local avoidDirect = ""
+
 function M.load()
     animTable = {
         ['idle'] = {1, 7}
@@ -32,6 +35,7 @@ function M.load()
     fifeY = 400
     targetX = fifeX
     targetY = fifeY
+    sqrt2 = math.sqrt(2)
 end
 
 function love.wheelmoved(_,y)
@@ -60,7 +64,6 @@ end
 local function goToPt(mX,mY, sceneData, dt)
     local x, y
     local errorMargin
-    local objInWay = nil
     if M.currentTarget ~= nil then
         x = M.currentTarget.hitbox.x+M.currentTarget.interactOrigin[1]
         y = M.currentTarget.hitbox.y+M.currentTarget.interactOrigin[2]
@@ -69,35 +72,33 @@ local function goToPt(mX,mY, sceneData, dt)
         x, y = mX, mY
         errorMargin = 5
     end
+
     local dist = utils.distance(fifeX, fifeY, x, y)
     if dist > errorMargin then
 
-        objInWay = utils.checkFront(fifeX,fifeY, (x - fifeX)/dist,(y - fifeY)/dist, M.currentTarget, sceneData)
+        local vectX = (x - fifeX)/dist
+        local vectY = (y - fifeY)/dist
+
+        local objInFront = utils.checkPoint(fifeX,fifeY, vectX,vectY , M.currentTarget, sceneData)
+        --local objBehind = utils.checkPoint(fifeX,fifeY, -vectX,-vectY, M.currentTarget, sceneData)
+        local objRight = utils.checkPoint(fifeX,fifeY, vectY, -vectX, M.currentTarget, sceneData)
+        local objLeft = utils.checkPoint(fifeX,fifeY, -vectY, vectX, M.currentTarget, sceneData)
+
+        --local objFrontRight = utils.checkPoint(fifeX,fifeY, (vectX*sqrt2/2)+(vectY*sqrt2/2), -(vectX*sqrt2/2)+(vectY*sqrt2/2), M.currentTarget, sceneData)
+        --local objFrontLeft = utils.checkPoint(fifeX,fifeY, (vectX*sqrt2/2)-(vectY*sqrt2/2), (vectX*sqrt2/2)+(vectY*sqrt2/2), M.currentTarget, sceneData)
+        --local objBackRight = utils.checkPoint(fifeX,fifeY, -(vectX*sqrt2/2)+(vectY*sqrt2/2), -(vectX*sqrt2/2)-(vectY*sqrt2/2), M.currentTarget, sceneData)
+        --local objBackLeft = utils.checkPoint(fifeX,fifeY, -(vectX*sqrt2/2)-(vectY*sqrt2/2), (vectX*sqrt2/2)-(vectY*sqrt2/2), M.currentTarget, sceneData)
+
         debugText = "x: "..fifeX.." y: "..fifeY
-        if objInWay ~= nil then
+        if objInFront ~= nil then
             local screenX, screenY = love.graphics.getDimensions()
-            --jenky garbage that techniocally works
-            if fVeloX > fVeloY then
-                if fifeY > screenX then
-                    fVeloX = 0
-                    fVeloY = ((y - fifeY)/dist + (objInWay.hitbox.h*dt))*speed*dt
-                else
-                    fVeloX = 0
-                    fVeloY = ((y - fifeY)/dist - (objInWay.hitbox.h*dt))*speed*dt
-                end
-            else
-                if fifeX > screenY then
-                    fVeloX = ((x - fifeX)/dist + (objInWay.hitbox.w*dt))*speed*dt
-                    fVeloY = 0
-                else
-                    fVeloX = ((x - fifeX)/dist - (objInWay.hitbox.w*dt))*speed*dt
-                    fVeloY = 0
-                end
-            end
-            -- end of garbo
+
+            fVeloX = (vectX+vectY)*speed*dt * (fVeloY/math.abs(fVeloY))
+            fVeloY = (vectY-vectX)*speed*dt * (fVeloX/math.abs(fVeloX))
+
         else
-            fVeloX = ((x - fifeX)/dist)*speed*dt
-            fVeloY = ((y - fifeY)/dist)*speed*dt
+            fVeloX = vectX*speed*dt
+            fVeloY = vectY*speed*dt
         end
     else
         fVeloX = 0

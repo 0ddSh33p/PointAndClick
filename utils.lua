@@ -59,8 +59,8 @@ function M.pointParallelogramColliding(px, py, ax, ay, bx, by, cx, cy, dx, dy)
     return halfColliding(ax,ay,bx,by,cx,cy) or halfColliding(cx,cy,dx,dy,ax,ay)
 end
 
-function M.checkFront (fifeX, fifeY, vectX, vectY, ignoreObj, sceneObjs)
-    local distFromOrigin = 5
+function M.checkPoint (fifeX, fifeY, vectX, vectY, ignoreObj, sceneObjs)
+    local distFromOrigin = 34
     local checkX = fifeX + (vectX*distFromOrigin)
     local checkY = fifeY + (vectY*distFromOrigin)
     local object = nil
@@ -72,5 +72,7 @@ function M.checkFront (fifeX, fifeY, vectX, vectY, ignoreObj, sceneObjs)
     end
     return object
 end
+
+function M.lerp(a,b,t) return a * (1-t) + b * t end
 
 return M

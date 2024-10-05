@@ -28,6 +28,7 @@ function M.load()
             distanceBuffer = 250,
             sx = 1,
             sy = 1,
+            floorLine = 240
 
             hitbox = {
             x = 780,
