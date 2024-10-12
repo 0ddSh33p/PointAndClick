@@ -118,19 +118,19 @@ local function goToPt(mX,mY, sceneData, dt)
             else
                 if vectX > 0 then
                     if fifeX < screenY/2 then
-                        vectX = (vectX*sqrt2/2)+(vectY*sqrt2/2)
-                        vectY = -(vectX*sqrt2/2)+(vectY*sqrt2/2)
-                    else
                         vectX = (vectX*sqrt2/2)-(vectY*sqrt2/2)
                         vectY = (vectX*sqrt2/2)+(vectY*sqrt2/2)
+                    else
+                        vectX = (vectX*sqrt2/2)+(vectY*sqrt2/2)
+                        vectY = -(vectX*sqrt2/2)+(vectY*sqrt2/2)
                     end
                 else
                     if fifeX > screenY/2 then
-                        vectX = (vectX*sqrt2/2)+(vectY*sqrt2/2)
-                        vectY = -(vectX*sqrt2/2)+(vectY*sqrt2/2)
-                    else
                         vectX = (vectX*sqrt2/2)-(vectY*sqrt2/2)
                         vectY = (vectX*sqrt2/2)+(vectY*sqrt2/2)
+                    else
+                        vectX = (vectX*sqrt2/2)+(vectY*sqrt2/2)
+                        vectY = -(vectX*sqrt2/2)+(vectY*sqrt2/2)
                     end
                 end
             end
