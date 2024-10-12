@@ -34,11 +34,10 @@ function love.keypressed(key, _, _)
 end
 
 function love.update(dt)
-    player.update(scene.data,dt)
+    player.update(scene.data, resRatioX, resRatioY, dt)
 end
 
 function love.mousepressed(x, y, button)
-
     if button == 1 then -- left mouse button
         for _, content in pairs(scene.data) do
             if utils.pointRectColliding(x / resRatioX, y / resRatioY, content.hitbox) then
@@ -59,7 +58,7 @@ function love.draw()
     for _, content in pairs(scene.data) do
         love.graphics.draw(content.img, content.hitbox.x * resRatioX, content.hitbox.y * resRatioY, 0, resRatioX, resRatioY)
     end
-    player.draw()
+    player.draw(resRatioX, resRatioY)
 
     love.graphics.setColor({0, 0, 0, 1})
     love.graphics.print(debugText,1,1)

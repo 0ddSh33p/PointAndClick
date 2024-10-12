@@ -158,14 +158,14 @@ function M.setClicked(object)
     M.currentTarget = object
 end
 
-function M.update(sceneData, dt)
+function M.update(sceneData, resRatioX, resRatioY, dt)
     -- animation code updating
     spritesheet.update(fifeSS, dt)
 
 
     -- does work
     if love.mouse.isDown(1) then
-        targetX, targetY = love.mouse.getX(), love.mouse.getY()
+        targetX, targetY = love.mouse.getX() / resRatioX, love.mouse.getY() / resRatioY
     end
     goToPt(targetX, targetY, sceneData, dt)
 
@@ -177,8 +177,8 @@ function M.update(sceneData, dt)
 end
 
 
-function M.draw()
-    spritesheet.draw(fifeSS, fifeX, fifeY, getScale(), fifeSS.spriteWidth/2, fifeSS.spriteHeight)
+function M.draw(resRatioX, resRatioY)
+    spritesheet.draw(fifeSS, fifeX * resRatioX, fifeY * resRatioY, getScale(), fifeSS.spriteWidth/2, fifeSS.spriteHeight)
 end
 
 return M
