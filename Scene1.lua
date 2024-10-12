@@ -18,17 +18,13 @@ function M.load()
             w = bgimg:getWidth(),
             h = bgimg:getHeight()
             },
-            sx = 1,
-            sy = 1,
         },
 
         {
             name = "box",
             img = box,
             distanceBuffer = 250,
-            sx = 1,
-            sy = 1,
-            floorLine = 240
+            floorLine = 240,
 
             hitbox = {
             x = 780,

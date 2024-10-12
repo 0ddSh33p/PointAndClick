@@ -8,6 +8,7 @@ M.minSize = 0.01
 M.maxSize = 1.0
 M.size = 0.3
 M.currentTarget = nil
+M.facing = 7 --number like a clock, 1 is straight up, each number higher movers 45 degrees clockwise
 
 local utils = require('utils')
 local spritesheet = require('spritesheet')
@@ -21,7 +22,9 @@ local fifeX, fifeY = 0,0 -- internal x and y - where fife's feet are
 local fVeloX, fVeloY = 0,0
 
 local sqrt2 = 0
-local avoidDirect = ""
+local inFront = false
+local vectX = 0
+local vectY = 0
 
 function M.load()
     animTable = {
@@ -76,8 +79,8 @@ local function goToPt(mX,mY, sceneData, dt)
     local dist = utils.distance(fifeX, fifeY, x, y)
     if dist > errorMargin then
 
-        local vectX = (x - fifeX)/dist
-        local vectY = (y - fifeY)/dist
+        if vectX == 0 then vectX = (x - fifeX)/dist end
+        if vectY == 0 then vectY = (y - fifeY)/dist end
 
         local objInFront = utils.checkPoint(fifeX,fifeY, vectX,vectY , M.currentTarget, sceneData)
         --local objBehind = utils.checkPoint(fifeX,fifeY, -vectX,-vectY, M.currentTarget, sceneData)
@@ -91,14 +94,59 @@ local function goToPt(mX,mY, sceneData, dt)
 
         debugText = "x: "..fifeX.." y: "..fifeY
         if objInFront ~= nil then
+            inFront = true
             local screenX, screenY = love.graphics.getDimensions()
 
-            fVeloX = (vectX+vectY)*speed*dt * (fVeloY/math.abs(fVeloY))
-            fVeloY = (vectY-vectX)*speed*dt * (fVeloX/math.abs(fVeloX))
-
+            if math.abs(vectX) < math.abs(vectY)then
+                if vectY < 0 then
+                    if fifeX < screenX/2 then
+                        vectX = (vectX*sqrt2/2)+(vectY*sqrt2/2)
+                        vectY = -(vectX*sqrt2/2)+(vectY*sqrt2/2)
+                    else
+                        vectX = (vectX*sqrt2/2)-(vectY*sqrt2/2)
+                        vectY = (vectX*sqrt2/2)+(vectY*sqrt2/2)
+                    end
+                else
+                    if fifeX > screenX/2 then
+                        vectX = (vectX*sqrt2/2)+(vectY*sqrt2/2)
+                        vectY = -(vectX*sqrt2/2)+(vectY*sqrt2/2)
+                    else
+                        vectX = (vectX*sqrt2/2)-(vectY*sqrt2/2)
+                        vectY = (vectX*sqrt2/2)+(vectY*sqrt2/2)
+                    end
+                end
+            else
+                if vectX > 0 then
+                    if fifeX < screenY/2 then
+                        vectX = (vectX*sqrt2/2)+(vectY*sqrt2/2)
+                        vectY = -(vectX*sqrt2/2)+(vectY*sqrt2/2)
+                    else
+                        vectX = (vectX*sqrt2/2)-(vectY*sqrt2/2)
+                        vectY = (vectX*sqrt2/2)+(vectY*sqrt2/2)
+                    end
+                else
+                    if fifeX > screenY/2 then
+                        vectX = (vectX*sqrt2/2)+(vectY*sqrt2/2)
+                        vectY = -(vectX*sqrt2/2)+(vectY*sqrt2/2)
+                    else
+                        vectX = (vectX*sqrt2/2)-(vectY*sqrt2/2)
+                        vectY = (vectX*sqrt2/2)+(vectY*sqrt2/2)
+                    end
+                end
+            end
+            fVeloX = vectX *speed*dt
+            fVeloY = vectY *speed*dt
         else
-            fVeloX = vectX*speed*dt
-            fVeloY = vectY*speed*dt
+            if objLeft ~= nil or objRight ~= nil then
+                fVeloX = vectX *speed*dt
+                fVeloY = vectY *speed*dt
+            else
+                inFront = false
+                vectX = (x - fifeX)/dist
+                vectY = (y - fifeY)/dist
+                fVeloX = vectX *speed*dt
+                fVeloY = vectY *speed*dt
+            end
         end
     else
         fVeloX = 0

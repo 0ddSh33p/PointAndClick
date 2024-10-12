@@ -57,7 +57,7 @@ function love.draw()
     love.graphics.setBackgroundColor(0, 0, 0, 1)
     -- changed keys to indicies because the draw order was randomized with the way it was before
     for _, content in pairs(scene.data) do
-        love.graphics.draw(content.img, content.hitbox.x * resRatioX, content.hitbox.y * resRatioY, 0, content.sx*resRatioX, content.sy*resRatioY)
+        love.graphics.draw(content.img, content.hitbox.x * resRatioX, content.hitbox.y * resRatioY, 0, resRatioX, resRatioY)
     end
     player.draw()
 
